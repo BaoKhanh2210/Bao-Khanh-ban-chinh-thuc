@@ -1,1 +1,32 @@
-flask>=3.0
+# =============================================================================
+# AIDEOM-VN — Phát triển kinh tế Việt Nam trong kỉ nguyên AI
+# Môi trường tính toán cho 12 bài tập + dashboard (app.py)
+# Cài đặt:  pip install -r requirements.txt
+# Khuyến nghị Python 3.10–3.12
+# =============================================================================
+
+# --- Lõi tính toán & dữ liệu ---
+numpy>=1.26
+pandas>=2.0
+scipy>=1.11
+
+# --- Tối ưu hóa ---
+PuLP>=2.7            # LP/MIP (Bài 2, 4, 5, 9, 10) — solver CBC đi kèm
+pymoo>=0.6.1         # NSGA-II đa mục tiêu (Bài 7)
+
+# --- Dashboard web tương tác ---
+streamlit>=1.30      # chạy: streamlit run app.py
+
+# --- Trực quan hóa (tùy chọn, cho biểu đồ nâng cao ngoài Streamlit) ---
+matplotlib>=3.7
+plotly>=5.18
+
+# =============================================================================
+# THƯ VIỆN TÙY CHỌN — chỉ cần nếu chạy các biến thể trong báo cáo/code snippet
+# (app.py KHÔNG bắt buộc các gói dưới đây; có thể bỏ comment khi cần)
+# =============================================================================
+# cvxpy>=1.4         # biến thể giải Bài 9 bằng quy hoạch lồi
+# Pyomo>=6.6         # biến thể giải Bài 10 (cần solver GLPK/CBC ngoài)
+# gymnasium>=0.29    # môi trường RL chuẩn cho Bài 11 (nếu dùng DQN)
+# stable-baselines3>=2.0   # DQN cho Bài 11 (mở rộng)
+# scikit-learn>=1.3  # tiện ích chuẩn hóa/đánh giá
