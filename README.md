@@ -1,136 +1,102 @@
-# AIDEOM-VN · Analytics Terminal
+# AIDEOM-VN — Phát triển kinh tế Việt Nam trong kỉ nguyên AI
 
-Web trình bày bộ **12 bài tập Mô hình ra quyết định** — phát triển kinh tế Việt
-Nam trong kỉ nguyên AI, sử dụng dữ liệu thực giai đoạn 2020–2025. Giao diện theo
-phong cách **command-center tối** với accent neon: mục lục **sidebar bên trái**,
-lưới nền kỹ thuật, phông Space Grotesk / JetBrains Mono. Mặc định nền tối, có nút
-☀/☾ để chuyển sáng/tối.
+Bài tập lớn học phần **Các mô hình ra quyết định**: giải 12 bài toán chính sách kinh tế số của Việt Nam bằng các mô hình tối ưu hóa và học tăng cường, trên dữ liệu thực tế 2020–2025. Toàn bộ kết quả được tính bằng Python và tái lập được (reproducible), kèm hai dashboard trực quan (web tĩnh và Streamlit) và báo cáo Word.
 
-Toàn bộ phép tính và biểu đồ được tính **trực tiếp trong trình duyệt** bằng
-JavaScript — không cần máy chủ Python để xử lý. File `app.py` chỉ là một cách tùy
-chọn để phục vụ trang qua HTTP.
+| | |
+|---|---|
+| **Sinh viên** | Nguyễn Bảo Khánh |
+| **Mã sinh viên** | 23051266 |
+| **Học phần** | Các mô hình ra quyết định |
+| **Giảng viên hướng dẫn** | TS. Phạm Văn Khánh |
+| **Năm học** | 2025 – 2026 |
 
----
+## Cấu trúc thư mục
 
-## 1. Yêu cầu trước khi chạy
-
-- **Trình duyệt** hiện đại (Chrome, Edge, Firefox, Safari).
-- **Kết nối Internet** — để tải thư viện vẽ biểu đồ (Chart.js), công thức toán
-  (KaTeX) và phông chữ từ CDN. Nếu không có mạng, trang vẫn hiển thị đầy đủ chữ và
-  số liệu, nhưng biểu đồ sẽ trống (có banner cảnh báo).
-- **Python 3** (chỉ cần nếu dùng Cách 2 hoặc Cách 3 bên dưới).
-
----
-
-## 2. Cách chạy web
-
-### Cách 1 — Máy chủ tĩnh Python (khuyến nghị, không cần cài gì)
-
-```bash
-cd aideom_terminal
-python -m http.server 5000
+```
+.
+├── app.py                                          # Dashboard Streamlit (12 bài, tương tác)
+├── requirements.txt                                # Danh sách thư viện Python
+├── README.md                                       # Tệp này
+├── Phát_triển_kinh_tế_Việt_Nam_trong_kỉ_nguyên_AI.html   # Dashboard web tĩnh (mở bằng trình duyệt)
+└── Phát_triển_kinh_tế_Việt_Nam_trong_kỉ_nguyên_AI.docx   # Báo cáo đầy đủ (Word)
 ```
 
-Sau đó mở trình duyệt: **http://127.0.0.1:5000**
+## Yêu cầu hệ thống
 
-> Đây là cách ổn định nhất. Mở qua `http://` giúp trình duyệt tải đủ thư viện và
-> tránh lỗi "Script error." hay gặp khi mở file trực tiếp.
+- Python 3.10 – 3.12
+- Kết nối Internet khi mở dashboard web tĩnh (`.html`) để tải Chart.js và KaTeX từ CDN. Nếu không có mạng, nội dung và số liệu vẫn hiển thị nhưng biểu đồ/công thức sẽ không render.
 
-### Cách 2 — Dùng Flask (app.py)
+## Cài đặt
 
 ```bash
-cd aideom_terminal
+# (khuyến nghị) tạo môi trường ảo
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+
+# cài thư viện
 pip install -r requirements.txt
-python app.py
 ```
 
-Mở: **http://127.0.0.1:5000** (Ctrl+C để dừng).
+## Cách chạy
 
-### Cách 3 — Mở trực tiếp (nhanh nhưng kém ổn định)
+### 1. Dashboard Streamlit (tương tác đầy đủ)
 
-Nhấp đúp vào `index.html`. Cách này đôi khi bị trình duyệt chặn tải thư viện
-(do giao thức `file://`), khiến biểu đồ trống. Nếu gặp lỗi, hãy dùng Cách 1.
-
-### Đưa lên mạng (deploy)
-
-Trang là một file tĩnh nên triển khai rất đơn giản:
-
-- **Vercel / Netlify / GitHub Pages:** chỉ cần upload `index.html` (không cần
-  `app.py`). Trên Vercel có thể kéo-thả thư mục hoặc đặt `index.html` vào `public/`.
-
----
-
-## 3. Nội dung web gồm những gì
-
-Trang chủ + 12 bài tập, chia theo 4 cấp độ khó tăng dần:
-
-| Cấp độ | Bài | Nội dung |
-|--------|-----|----------|
-| **Dễ** | 1 | Hàm sản xuất Cobb-Douglas mở rộng — TFP, MAPE, phân rã tăng trưởng, kịch bản 2030 (có thanh trượt mô phỏng) |
-| | 2 | Phân bổ ngân sách 4 hạng mục (LP) — giá đối ngẫu, độ nhạy ngân sách |
-| | 3 | Chỉ số ưu tiên ngành — chuẩn hóa min-max, xếp hạng 10 ngành, độ nhạy trọng số |
-| **Trung bình** | 4 | LP phân bổ ngân sách số theo vùng — ràng buộc công bằng vùng miền |
-| | 5 | MIP chọn dự án chuyển đổi số — knapsack nhị phân, ràng buộc tiên quyết |
-| | 6 | TOPSIS xếp hạng 6 vùng — trọng số chuyên gia vs Entropy, AHP |
-| **Khá khó** | 7 | NSGA-II đa mục tiêu — đường biên Pareto, tọa độ song song, nghiệm thỏa hiệp |
-| | 8 | Tối ưu động 2026–2035 — quỹ đạo vốn, phân tích cú sốc |
-| | 9 | Tác động AI tới lao động — NetJob ròng, ngưỡng đào tạo, trần an sinh |
-| **Khó** | 10 | Quy hoạch ngẫu nhiên 2 giai đoạn — VSS, EVPI, robust optimization |
-| | 11 | Q-learning chính sách thích nghi — MDP, π*, so sánh rule-based |
-| | 12 | AIDEOM-VN tích hợp — 6 module, 5 kịch bản chính sách (chia 4 tab) |
-
-Mỗi bài đều có: **mục tiêu học tập**, **mô hình toán** (công thức), **các câu kết
-quả** (bảng số + biểu đồ tương tác), và **thảo luận chính sách**.
-
----
-
-## 4. Cách trình bày & điều hướng
-
-- **Trang chủ** (`#home`): banner tổng quan, 4 chỉ số vĩ mô 2025, ma trận độ khó,
-  danh mục 12 module (nhấp để mở).
-- **Sidebar bên trái**: mục lục 12 bài + thông tin sinh viên ở cuối.
-- **Liên kết trực tiếp** tới từng bài qua hash trên URL:
-  - Trang chủ: `index.html#home`
-  - Từng bài: `index.html#bai1`, `#bai2`, … `#bai12`
-- **Nút ☀/☾** ở góc phải trên: chuyển nền sáng/tối (tự ghi nhớ lựa chọn).
-
----
-
-## 5. Cấu trúc thư mục
-
-```
-aideom_terminal/
-├── index.html        # Toàn bộ web: HTML + CSS + JS + dữ liệu (tự chứa)
-├── app.py            # Máy chủ Flask tùy chọn (Cách 2)
-├── requirements.txt  # Thư viện cần cho app.py (chỉ có flask)
-└── README.md         # File hướng dẫn này
+```bash
+streamlit run app.py
 ```
 
-**Bên trong `index.html`** (một file duy nhất, tự chứa):
+Trình duyệt sẽ tự mở tại `http://localhost:8501`. Chọn từng bài ở thanh bên trái; các thanh trượt (ngân sách, hệ số công bằng λ, chiết khấu ρ, trọng số AI, số episodes…) cho phép chạy lại mô hình theo thời gian thực.
 
-- `<style>` — toàn bộ CSS giao diện (chủ đề tối/sáng, sidebar, thẻ, bảng, biểu đồ).
-- Phần HTML — header, sidebar mục lục, khung 12 trang bài.
-- `<script>` — chứa:
-  - **Đối tượng `R`**: dữ liệu kết quả đã tính sẵn cho cả 12 bài.
-  - **Hàm `renderBaiN()` / `initBaiN()`**: dựng nội dung và vẽ biểu đồ từng bài.
-  - **Bộ định tuyến (router)**: hiển thị bài theo hash URL, đổi chủ đề sáng/tối,
-    bắt lỗi và cảnh báo nếu thư viện CDN không tải được.
+> Mọi con số trong dashboard được **tính trực tiếp** bằng `numpy / scipy / PuLP / pymoo` mỗi khi mở trang — không hard-code, nên hoàn toàn tái lập được.
 
----
+### 2. Dashboard web tĩnh
 
-## 6. Xử lý sự cố
+Mở trực tiếp tệp `Phát_triển_kinh_tế_Việt_Nam_trong_kỉ_nguyên_AI.html` bằng trình duyệt (Chrome, Edge, Firefox…). Không cần cài đặt gì thêm. Mỗi bài có mô hình toán (KaTeX), mã Python, biểu đồ (Chart.js) và phần thảo luận chính sách.
 
-| Hiện tượng | Cách khắc phục |
-|------------|----------------|
-| Biểu đồ trống / banner đỏ cảnh báo | Kiểm tra mạng Internet; dùng Cách 1 thay vì mở file trực tiếp |
-| `Uncaught Error: Script error.` | Mở qua `http://` (Cách 1), không nhấp đúp file |
-| Cổng 5000 đang bận | Đổi cổng: `python -m http.server 5050` rồi mở `http://127.0.0.1:5050` |
-| Muốn xem lỗi chi tiết | Mở F12 → tab **Console**, chụp dòng đỏ |
+### 3. Báo cáo
 
----
+Mở `Phát_triển_kinh_tế_Việt_Nam_trong_kỉ_nguyên_AI.docx` bằng Microsoft Word hoặc LibreOffice. Báo cáo có mục lục tự động, công thức, bảng kết quả và diễn giải chính sách cho cả 12 bài.
 
-## 7. Nguồn dữ liệu
+## Nội dung 12 bài tập
 
-Cục Thống kê quốc gia (NSO/GSO), Ngân hàng Thế giới, Bộ Khoa học - Công nghệ,
-Global Innovation Index 2025. Số liệu CSV được làm tròn phục vụ giảng dạy; khi
-viết luận văn cần truy xuất số gốc tại `nso.gov.vn`.
+| Cấp độ | Bài | Chủ đề | Phương pháp / công cụ |
+|--------|-----|--------|------------------------|
+| Dễ | 1 | Hàm sản xuất Cobb–Douglas mở rộng | TFP, phân rã tăng trưởng · numpy |
+| Dễ | 2 | Phân bổ ngân sách 4 hạng mục | LP + shadow price · scipy/PuLP |
+| Dễ | 3 | Chỉ số ưu tiên ngành | Chuẩn hóa min-max + trọng số |
+| Trung bình | 4 | LP phân bổ ngân sách theo vùng | LP + ràng buộc công bằng · PuLP |
+| Trung bình | 5 | Chọn danh mục dự án | MIP / knapsack nhị phân · PuLP |
+| Trung bình | 6 | Xếp hạng vùng ưu tiên AI | TOPSIS + Entropy |
+| Khá khó | 7 | Tối ưu đa mục tiêu | NSGA-II (4 mục tiêu) · pymoo |
+| Khá khó | 8 | Tối ưu động 2026–2035 | Điều khiển tối ưu · scipy SLSQP |
+| Khá khó | 9 | Tác động AI tới lao động | LP tối đa việc làm ròng (NetJob) |
+| Khó | 10 | Quy hoạch ngẫu nhiên 2 giai đoạn | Stochastic LP (VSS, EVPI) · PuLP |
+| Khó | 11 | Chính sách thích nghi | Q-learning (MDP) · numpy |
+| Khó | 12 | Hệ thống tích hợp 6 module | Tích hợp Bài 1–11 |
+
+### Một số phát hiện chính
+
+- **Bài 1:** TFP và số hóa là động lực tăng trưởng chính (đóng góp ~49% và ~10%).
+- **Bài 4:** ràng buộc công bằng λ = 0,70 (theo đề) là **vô nghiệm** (λ khả thi tối đa ≈ 0,683); ở mức λ = 0,65 chi phí công bằng đo được ~16,8% GDP gain.
+- **Bài 8:** quỹ đạo đầu tư tối ưu mang tính **front-loaded** (đầu tư sớm để vốn và TFP cộng dồn).
+- **Bài 9:** với cơ cấu hệ số hiện tại, AI **không** gây mất việc ròng nếu đi kèm đào tạo lại (tổng NetJob ~1,37 triệu việc).
+- **Bài 11:** chính sách thích nghi π* (Q-learning) **vượt** mọi luật cố định nhờ sắp xếp số hóa → AI → bao trùm đúng thời điểm.
+
+## Nguồn dữ liệu
+
+- Cục Thống kê quốc gia (NSO/GSO)
+- Ngân hàng Thế giới (World Bank)
+- Bộ Khoa học – Công nghệ (MoST)
+- Global Innovation Index 2025 (WIPO)
+
+Số liệu được làm tròn phục vụ giảng dạy. Khung chính sách tham chiếu: Nghị quyết 57-NQ/TW; các Quyết định 749, 127, 411/QĐ-TTg; cam kết COP26.
+
+## Công nghệ sử dụng
+
+- **Tính toán:** numpy, pandas, scipy
+- **Tối ưu hóa:** PuLP (LP/MIP, solver CBC), pymoo (NSGA-II)
+- **Dashboard:** Streamlit (`app.py`); HTML/JavaScript với Chart.js và KaTeX (dashboard web tĩnh)
+
+## Ghi chú
+
+Dự án có sử dụng công cụ AI hỗ trợ trong quá trình lập trình và trình bày, theo đúng quy định cho phép của học phần. Mọi mô hình toán, lựa chọn tham số và diễn giải kết quả đều được kiểm tra thủ công để bảo đảm tính đúng đắn và tái lập.
